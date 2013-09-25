@@ -1,0 +1,93 @@
+body {
+    background: #222;
+    color: white;
+    font-family: arial, sans-serif;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+button {
+    background-color: darkred;
+    color: white;
+    border: 2px solid black;
+}
+
+.hd {
+    background-color: rgb(185, 9, 11);
+}
+
+.hd:after {
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-size: 150px 45px;
+    width: 150px;
+    height: 45px;
+    content: '';
+
+    margin: auto;
+    display: block;
+
+    position: relative;
+    margin-top: -22px;
+    top: 50%;
+}
+
+.titles > li {
+    background: black;
+}
+
+#browse {
+    background: url(../images/browse-icon.png) no-repeat 50% 50%;
+    background-size: 20px 16px;
+}
+
+#search {
+    background: url(../images/search-icon.png) no-repeat 50% 50%;
+    background-size: 20px 22px;
+}
+
+#close {
+    background: url(../images/close-icon.png) no-repeat 50% 50%;
+    background-size: 20px 22px;
+}
+
+#detail {
+    background-color: #eee;
+    color: #444;
+}
+
+.play {
+    background-color: #aaa;
+}
+
+.play:after {
+    background-image: url(../images/play-button-overlay.png);
+    background-repeat: no-repeat;
+    background-size: 124px 124px;
+    width: 124px;
+    height: 124px;
+    content: '';
+    margin: auto;
+    display: block;
+}
+
+.queue {
+    background-color: #bbb;
+    border: none;
+    border-radius: 5px;
+}
+
+.queue:after {
+    background-image: url(../images/add_icon_gray.png);
+    background-repeat: no-repeat;
+    background-size: 66px 66px;
+    width: 66px;
+    height: 66px;
+    content: '';
+    display: block;
+    position: absolute;
+    left: 5px;
+    top: 15px;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "demo",
+  "version": "0.0.0",
+  "description": "demo",
+  "engines": {
+    "node": "~0.10.17",
+    "npm": "~1.3.9"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ekashida/demo.git"
+  },
+  "author": "Eugene Kashida",
+  "dependencies": {
+    "express": "~3.4.0",
+    "express3-handlebars": "~0.5.0"
+  }
+}

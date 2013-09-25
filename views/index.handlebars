@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Netflix Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <link rel="stylesheet" href="css/layout.css" type="text/css">
+    <link rel="stylesheet" href="css/theme.css" type="text/css">
+</head>
+
+<body class="{{device}}">
+    <div id="main">
+        <div class="hd">
+            <button id="browse" type="button">
+                <span class="visually-hidden">Browse</span>
+            </button>
+            <button id="search" type="button">
+                <span class="visually-hidden">Search</span>
+            </button>
+        </div>
+        <ol class="bd">
+            {{#each movieData}}
+            <li>
+                <h2 class="title">{{name}}</h2>
+                <ol class="scrollview movies{{#if detailed}} detailed{{/if}}"{{#if size}} style="height:{{size.height}}px"{{/if}}>
+                    {{#each movies}}
+                    <li class="movie" data-image="{{{image.s}}}"
+                        {{#if ../detailed}}
+                             style="background-image:url({{{image.l}}})"
+                        {{else}}
+                            {{#if ../../load}}
+                             style="background-image:url({{{image.s}}})"
+                            {{/if}}
+                        {{/if}}>
+                        <button><span class="visually-hidden">{{title}}</span></button>
+                    </li>
+                    {{/each}}
+                </ol>
+            </li>
+            {{/each}}
+        </ol>
+    </div>
+
+    <div id="detail" class="hidden">
+        <div class="hd">
+            <button id="close">
+                <span class="visually-hidden">Close</span>
+            </button>
+        </div>
+        <div class="bd">
+            <h1 class="movie-title"></h1>
+            <button class="play"><span class="visually-hidden">Play Movie</span></a>
+            <button class="queue">Instant Queue</button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.12.0/yui-base/yui-base-min.js&3.12.0/oop/oop-min.js&3.12.0/features/features-min.js&3.12.0/dom-core/dom-core-min.js&3.12.0/dom-base/dom-base-min.js&3.12.0/color-base/color-base-min.js&3.12.0/dom-style/dom-style-min.js&3.12.0/dom-screen/dom-screen-min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>
