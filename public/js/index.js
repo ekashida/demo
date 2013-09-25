@@ -14,10 +14,15 @@ var Y = YUI().use('dom-screen'), // basic DOM operations
 // TODO: conditionally load the rest of the rows
 function lazyLoadRows () {
     var movies = d.querySelectorAll('.movie'),
+        movie,
         len,
         i;
     for (i = 0, len = movies.length; i < len; i += 1) {
-        movies[i].setAttribute('style', 'background-image:url(' + movies[i].dataset.image + ')');
+        movie = movies[i];
+        if (!Y.DOM.hasClass(movie, 'loaded')) {
+            Y.DOM.addClass(movie, 'loaded');
+            movie.setAttribute('style', 'background-image:url(' + movie.dataset.image + ')');
+        }
     }
 }
 
