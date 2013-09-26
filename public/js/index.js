@@ -10,6 +10,8 @@ var Y = YUI().use('dom-screen'),
     movieTitle  = d.querySelector('#detail .movie-title'),
     playButton  = d.querySelector('#detail .play'),
 
+    scrollViews = d.querySelectorAll('.scrollview'),
+
     loadedCards = [],
 
     timeoutId,
@@ -46,8 +48,6 @@ function loadVisible (refresh) {
     }
 }
 
-loadVisible();
-
 // hide detail view and show main view
 closeButton.addEventListener('click', function () {
     Y.DOM.removeClass(mainView, 'hidden');
@@ -68,14 +68,25 @@ movieLists.addEventListener('click',  function (e) {
     }
 });
 
-// lazy load when the user stops scrolling
-w.addEventListener('scroll', function () {
+/**
+Lazily-load box art for visible cards when the user stops scrolling.
+@method scrollHandler
+**/
+function scrollHandler () {
     if (timeoutId) {
         w.clearTimeout(timeoutId);
     }
     timeoutId = setTimeout(function () {
         loadVisible();
     }, 100);
+}
+
+w.addEventListener('scroll', scrollHandler);
+
+Array.prototype.slice.apply(scrollViews).forEach(function (sv) {
+    sv.addEventListener('scroll', scrollHandler);
 });
+
+loadVisible();
 
 }(window, document));
