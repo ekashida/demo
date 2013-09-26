@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "demo",
   "engines": {
-    "node": "~0.10.17",
-    "npm": "~1.3.9"
+    "node": "0.10.17",
+    "npm": "1.3.9"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
