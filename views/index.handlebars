@@ -28,16 +28,9 @@
                 <ol class="scrollview movies{{#if detailed}} detailed{{/if}}"{{#if size}} style="height:{{size.height}}px"{{/if}}>
                 {{#each movies}}
                     {{#if ../detailed}}
-                    {{! load the large image if we want a detailed view}}
-                    <li class="movie loaded" data-image="{{{image.s}}}" style="background-image:url({{{image.l}}})">
+                    <li class="movie" data-image="{{{image.s}}}" data-detailed="{{{image.l}}}">
                     {{else}}
-                        {{#if ../../load}}
-                    {{! load the small image}}
-                    <li class="movie loaded" data-image="{{{image.s}}}" style="background-image:url({{{image.s}}})">
-                        {{else}}
-                    {{! don't load any image}}
                     <li class="movie" data-image="{{{image.s}}}">
-                        {{/if}}
                     {{/if}}
                         <button><span class="visually-hidden">{{title}}</span></button>
                     </li>

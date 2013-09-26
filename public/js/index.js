@@ -1,6 +1,7 @@
 (function (w, d, undefined) {
 
-var Y = YUI().use('dom-screen'), // basic DOM operations
+// region management functionality (http://yuilibrary.com/yui/docs/api/modules/dom-screen.html)
+var Y = YUI().use('dom-screen'),
 
     movieLists  = d.querySelector('#main .bd'),
     closeButton = d.querySelector('#close'),
@@ -9,22 +10,43 @@ var Y = YUI().use('dom-screen'), // basic DOM operations
     movieTitle  = d.querySelector('#detail .movie-title'),
     playButton  = d.querySelector('#detail .play'),
 
-    timeoutId;
+    loadedCards = [],
 
-// TODO: conditionally load the rest of the rows
-function lazyLoadRows () {
-    var movies = d.querySelectorAll('.movie'),
-        movie,
+    timeoutId,
+    cards;
+
+/**
+Loads the box art for cards that are visible in the viewport. Caches loaded
+cards to minimize DOM interaction.
+@method loadVisible
+@param refresh Force a refresh of the NodeList of cards.
+**/
+function loadVisible (refresh) {
+    var image,
+        card,
         len,
         i;
-    for (i = 0, len = movies.length; i < len; i += 1) {
-        movie = movies[i];
-        if (!Y.DOM.hasClass(movie, 'loaded')) {
-            Y.DOM.addClass(movie, 'loaded');
-            movie.setAttribute('style', 'background-image:url(' + movie.dataset.image + ')');
+
+    if (!cards || refresh) {
+        cards = d.querySelectorAll('.movie');
+        loadedCards = [];
+    }
+
+    for (i = 0, len = cards.length; i < len; i += 1) {
+        card = cards[i];
+
+        // if the card has not been loaded yet and the card is visible
+        if (loadedCards.indexOf(card) === -1 && Y.DOM.inViewportRegion(card)) {
+            // give detailed image higher priority
+            image = card.dataset.detailed || card.dataset.image;
+
+            card.setAttribute('style', 'background-image:url(' + image + ')');
+            loadedCards.push(card);
         }
     }
 }
+
+loadVisible();
 
 // hide detail view and show main view
 closeButton.addEventListener('click', function () {
@@ -52,8 +74,8 @@ w.addEventListener('scroll', function () {
         w.clearTimeout(timeoutId);
     }
     timeoutId = setTimeout(function () {
-        lazyLoadRows();
-    }, 300);
+        loadVisible();
+    }, 100);
 });
 
 }(window, document));
