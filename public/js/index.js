@@ -10,43 +10,92 @@ var Y = YUI().use('dom-screen'),
     movieTitle  = d.querySelector('#detail .movie-title'),
     playButton  = d.querySelector('#detail .play'),
 
-    scrollViews = d.querySelectorAll('.scrollview'),
+    scrollViewNodeList = d.querySelectorAll('.scrollview'),
+    scrollViewArray    = Array.prototype.slice.apply(scrollViewNodeList),
 
-    loadedCards = [],
+    lists = [],
 
-    timeoutId,
-    cards;
+    timeoutId;
 
-/**
-Loads the box art for cards that are visible in the viewport. Caches loaded
-cards to minimize DOM interaction.
-@method loadVisible
-@param refresh Force a refresh of the NodeList of cards.
-**/
-function loadVisible (refresh) {
-    var image,
-        card,
-        len,
-        i;
+function bind (context, fn) {
+    return function () {
+        fn.apply(context, arguments);
+    };
+}
 
-    if (!cards || refresh) {
-        cards = d.querySelectorAll('.movie');
-        loadedCards = [];
-    }
+function MovieList (node) {
+    var self = this;
 
-    for (i = 0, len = cards.length; i < len; i += 1) {
-        card = cards[i];
+    this.node = node;
+    this.cards = node.getElementsByTagName('li');
+    this.loaded = [];
 
-        // if the card has not been loaded yet and the card is visible
-        if (loadedCards.indexOf(card) === -1 && Y.DOM.inViewportRegion(card)) {
-            // give detailed image higher priority
-            image = card.dataset.detailed || card.dataset.image;
+    this.node.addEventListener('scroll', function () {
+        if (self.timeoutId) {
+            w.clearTimeout(self.timeoutId);
+        }
+        self.timeoutId = setTimeout(function () {
+            self.loadVisible();
+        }, 100);
+    });
+}
 
-            card.setAttribute('style', 'background-image:url(' + image + ')');
-            loadedCards.push(card);
+MovieList.prototype = {
+    /**
+    Load the box art for a card. Uses detailed images when available.
+    @param {Node} card
+    **/
+    load: function (card) {
+        var image = card.dataset.detailed || card.dataset.image;
+        card.setAttribute('style', 'background-image:url(' + image + ')');
+        this.loaded.push(card);
+    },
+
+    /**
+    Loads the box art for cards that are visible in the viewport. Caches loaded
+    cards to minimize DOM interaction.
+    @method loadVisible
+    @param refresh Force a refresh of the NodeList of cards.
+    **/
+    loadVisible: function () {
+        var card,
+            len,
+            i;
+
+        for (i = 0, len = this.cards.length; i < len; i += 1) {
+            card = this.cards[i];
+
+            if (
+                this.loaded.indexOf(card) === -1 && // card has not been loaded
+                Y.DOM.inViewportRegion(card)        // card is in viewport
+            ) {
+                this.load(this.cards[i]);
+            }
+        }
+
+        this.fill(); // load any gaps
+    },
+
+    /**
+    Loads any unloaded cards that come before the most recently loaded card.
+    **/
+    fill: function () {
+        var endmost = this.loaded[this.loaded.length - 1],
+            card,
+            len,
+            i;
+
+        if (endmost) {
+            for (i = 0, len = this.cards.length; i < len; i += 1) {
+                card = this.cards[i];
+                if (card === endmost) {
+                    break;
+                }
+                this.load(card);
+            }
         }
     }
-}
+};
 
 // hide detail view and show main view
 closeButton.addEventListener('click', function () {
@@ -54,7 +103,7 @@ closeButton.addEventListener('click', function () {
     Y.DOM.addClass(detailView, 'hidden');
 });
 
-// event delegation
+// event delegation for movie clicks
 movieLists.addEventListener('click',  function (e) {
     if (e.target.tagName === 'BUTTON') {
         var image   = e.target.parentNode.dataset.image,
@@ -68,25 +117,22 @@ movieLists.addEventListener('click',  function (e) {
     }
 });
 
-/**
-Lazily-load box art for visible cards when the user stops scrolling.
-@method scrollHandler
-**/
-function scrollHandler () {
+w.addEventListener('scroll', function () {
     if (timeoutId) {
         w.clearTimeout(timeoutId);
     }
     timeoutId = setTimeout(function () {
-        loadVisible();
+        for (var i = 0, len = lists.length; i < len; i += 1) {
+            lists[i].loadVisible();
+        }
     }, 100);
-}
-
-w.addEventListener('scroll', scrollHandler);
-
-Array.prototype.slice.apply(scrollViews).forEach(function (sv) {
-    sv.addEventListener('scroll', scrollHandler);
 });
 
-loadVisible();
+// initialize all MovieList instances
+scrollViewArray.forEach(function (sv) {
+    var list = new MovieList(sv);
+    list.loadVisible();
+    lists.push(list);
+});
 
 }(window, document));
