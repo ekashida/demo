@@ -91,3 +91,7 @@ button {
     left: 5px;
     top: 15px;
 }
+
+.hold {
+    -webkit-filter: brightness(0.5);
+}

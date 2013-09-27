@@ -16,7 +16,8 @@ var Y = YUI().use('dom-screen'),
     lists = [],
 
     selectedMovie,
-    timeoutId;
+    timeoutId,
+    holdId;
 
 function bind (context, fn) {
     return function () {
@@ -120,6 +121,20 @@ movieLists.addEventListener('click',  function (e) {
         Y.DOM.addClass(mainView, 'hidden');
 
         selectedMovie = e.target;
+    }
+});
+
+movieLists.addEventListener('touchstart',  function (e) {
+    if (e.target.tagName === 'BUTTON') {
+        holdId = setTimeout(function () {
+            Y.DOM.addClass(e.target.parentNode, 'hold');
+        }, 100);
+    }
+});
+movieLists.addEventListener('touchend',  function (e) {
+    if (e.target.tagName === 'BUTTON') {
+        w.clearTimeout(holdId);
+        Y.DOM.removeClass(e.target.parentNode, 'hold');
     }
 });
 
