@@ -48,9 +48,11 @@ MovieList.prototype = {
     @param {Node} card
     **/
     load: function (card) {
-        var image = card.dataset.detailed || card.dataset.image;
-        card.setAttribute('style', 'background-image:url(' + image + ')');
-        this.loaded.push(card);
+        if (this.loaded.indexOf(card) === -1) {
+            var image = card.dataset.detailed || card.dataset.image;
+            card.setAttribute('style', 'background-image:url(' + image + ')');
+            this.loaded.push(card);
+        }
     },
 
     /**
