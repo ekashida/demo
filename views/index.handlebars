@@ -1,8 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Netflix Gallery</title>
+    <title>Netflix</title>
     <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -21,24 +21,27 @@
                 <span class="visually-hidden">Search</span>
             </button>
         </div>
-        <ol class="bd">
-            {{#each movieData}}
-            <li>
-                <h2 class="title">{{name}}</h2>
-                <ol class="scrollview movies{{#if detailed}} detailed{{/if}}"{{#if size}} style="height:{{size.height}}px"{{/if}}>
-                {{#each movies}}
-                    {{#if ../detailed}}
-                    <li class="movie" data-image="{{{image.s}}}" data-detailed="{{{image.l}}}">
-                    {{else}}
-                    <li class="movie" data-image="{{{image.s}}}">
-                    {{/if}}
-                        <button><span class="visually-hidden">{{title}}</span></button>
-                    </li>
+        <div class="bd">
+            <h1 class="visually-hidden">Netflix Gallery</h1>
+            <ol>
+                {{#each movieData}}
+                <li>
+                    <h2 class="title">{{name}}</h2>
+                    <ol class="scrollview movies{{#if detailed}} detailed{{/if}}"{{#if size}} style="height:{{size.height}}px"{{/if}}>
+                    {{#each movies}}
+                        {{#if ../detailed}}
+                        <li class="movie" data-image="{{{image.s}}}" data-detailed="{{{image.l}}}">
+                        {{else}}
+                        <li class="movie" data-image="{{{image.s}}}">
+                        {{/if}}
+                            <button><span class="visually-hidden">{{title}}</span></button>
+                        </li>
+                    {{/each}}
+                    </ol>
+                </li>
                 {{/each}}
-                </ol>
-            </li>
-            {{/each}}
-        </ol>
+            </ol>
+        </div>
     </div>
 
     <div id="detail" class="hidden">
@@ -49,8 +52,8 @@
         </div>
         <div class="bd">
             <h1 class="movie-title"></h1>
-            <button class="play"><span class="visually-hidden">Play Movie</span></a>
-            <button class="queue">Instant Queue</button>
+            <button class="play" tabindex=1><span class="visually-hidden">Play Movie</span></a>
+            <button class="queue" tabindex=2>Instant Queue</button>
         </div>
     </div>
 

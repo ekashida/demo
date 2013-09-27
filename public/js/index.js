@@ -15,6 +15,7 @@ var Y = YUI().use('dom-screen'),
 
     lists = [],
 
+    selectedMovie,
     timeoutId;
 
 function bind (context, fn) {
@@ -101,6 +102,9 @@ MovieList.prototype = {
 closeButton.addEventListener('click', function () {
     Y.DOM.removeClass(mainView, 'hidden');
     Y.DOM.addClass(detailView, 'hidden');
+
+    // give the selected movie focus when returning to the gallery
+    selectedMovie.focus();
 });
 
 // event delegation for movie clicks
@@ -114,6 +118,8 @@ movieLists.addEventListener('click',  function (e) {
 
         Y.DOM.removeClass(detailView, 'hidden');
         Y.DOM.addClass(mainView, 'hidden');
+
+        selectedMovie = e.target;
     }
 });
 
